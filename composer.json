@@ -1,0 +1,34 @@
+{
+    "name": "macure/jojka-sdk",
+    "description": "SDK Library for Jojka API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marko Curcic",
+            "email": "marko.curcic@stkfinans.no"
+        },
+        {
+            "name": "Vladimir Simic",
+            "email": "vladimir.simic@prodevcon.ch"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5 || ^8.0",
+        "guzzlehttp/guzzle": "^7.4",
+        "symfony/options-resolver": "^6.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Macure\\JojkaSDK\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Macure\\JojkaSDK\\Tests\\": "tests/"
+        }
+    }
+}
