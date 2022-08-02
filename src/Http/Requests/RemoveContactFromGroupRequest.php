@@ -1,16 +1,18 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Remove contact from group options
+ * Remove contact from group request
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class RemoveContactFromGroupOptions
+class RemoveContactFromGroupRequest extends Request
 {
+    public const URI = parent::URI . '/rm_contact_from_group';
+
     /**
      * Contact's mobile number.
      * 
@@ -26,14 +28,12 @@ class RemoveContactFromGroupOptions
     public const GROUP = 'group';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver
             ->setRequired([self::MSISDN, self::GROUP]);
     }

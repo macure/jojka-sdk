@@ -1,6 +1,6 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use DateTime;
 use Symfony\Component\OptionsResolver\Options;
@@ -8,12 +8,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 /**
- * Fetch Replies Options class
+ * Fetch replies request class
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class FetchRepliesOptions
+class FetchRepliesRequest extends Request
 {
+    public const URI = parent::URI . '/fetch_replies';
+
     /**
      * Only fetch messages with this sender.
      * 
@@ -33,14 +35,12 @@ class FetchRepliesOptions
     public const SINCE_TIME = 'since_time';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver
             ->setDefined([self::FROM_MSISDN, self::SINCE_TIME])
             ->setNormalizer(self::SINCE_TIME, function (Options $options, $value) {

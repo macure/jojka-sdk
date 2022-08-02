@@ -1,26 +1,31 @@
 <?php 
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use DateTime;
+use Macure\JojkaSDK\Http\Requests\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 /**
- * Add Campaign Options 
+ * Add campaign request 
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class AddCampaignOptions
+class AddCampaignRequest extends Request
 {
+    public const URI = parent::URI . '/add_campaign';
+
     /**
      * One or more mobile numbers for the recipients of the SMS, separated by a semi-colon. 
      * Example: 
      *      46709771337;46709966666
      * 
      * Up to 1000 recipients can be specified in this way. For larger volumes multiple requests should be used.
+     * 
+     * Required as alternative.
      */
     public const TO_MSISDN = 'to_msisdn';
 
@@ -29,11 +34,15 @@ class AddCampaignOptions
      * All contacts saved at Jojka and that are members of at least one of the listed groups will receive the SMS.
      * 
      * There is a special group named “all”. If this is stated, the SMS is sent to all contacts that you as a customer have saved in Jojka.
+     * 
+     * Required as alternative.
      */
     public const TO_GROUP = 'to_group';
 
     /**
      * Contents of the SMS.
+     * 
+     * Required.
      */
     public const MSG = 'msg';
 
@@ -46,6 +55,8 @@ class AddCampaignOptions
      * Specific user names or free text names are ordered from Jojka.
      * 
      * If the parameter is left out, your account's Jojka number is used as sender.
+     * 
+     * Optional.
      */
     public const FROM = 'from';
 
@@ -53,24 +64,26 @@ class AddCampaignOptions
      * Time when the campaign should start to be sent. Must be given in the format "YYYY-MM-DD hh:mm:ss"
      * Example:
      *      2016-05-31 12:18:52
+     * 
+     * Optional.
      */
     public const SCHEDULED = 'scheduled';
 
     /**
      * Campaign name. 
      * Only used for internal statistics and follow up, never shown to recipients of the campaign.
+     * 
+     * Optional.
      */
     public const NAME = 'name';
 
     /**
-     * Configure Options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver
             ->setRequired(self::MSG)
             ->setDefined([

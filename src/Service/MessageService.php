@@ -2,12 +2,10 @@
 
 namespace Macure\JojkaSDK\Service;
 
-use Macure\JojkaSDK\Http\Requests\Request;
-use Macure\JojkaSDK\Http\Options\SendOptions;
-use Macure\JojkaSDK\Http\Options\FetchRepliesOptions;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Macure\JojkaSDK\Http\Options\GetMessageStatusOptions;
-use Macure\JojkaSDK\Http\Options\GetMessageIdsByCampaignIdOptions;
+use Macure\JojkaSDK\Http\Requests\SendRequest;
+use Macure\JojkaSDK\Http\Requests\FetchRepliesRequest;
+use Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest;
+use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
 
 /**
  * Message Service class
@@ -16,11 +14,6 @@ use Macure\JojkaSDK\Http\Options\GetMessageIdsByCampaignIdOptions;
  */
 class MessageService extends AbstractService
 {
-    public const FETCH_REPLIES_URI              = '/fetch_replies';
-    public const GET_MSG_IDS_BY_CAMPAIGN_ID_URI = '/get_msg_ids_by_campaign_id';
-    public const GET_MSG_STATUS_URI             = '/get_msg_status';
-    public const SEND_URI                       = '/send';
-
     /**
      * {@inheritDoc}
      * 
@@ -49,16 +42,12 @@ class MessageService extends AbstractService
      * 
      * @return array<string,string>
      * 
-     * @see \Macure\JojkaSDK\Http\Options\FetchRepliesOptions for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\FetchRepliesRequest for a list of available options.
      */
     public function fetchReplies(array $data)
     {
-        $resolver = new OptionsResolver();
-        FetchRepliesOptions::configure($resolver);
-
-        $data = $resolver->resolve($data);
-
-        $response = $this->client->sendRequest(new Request(self::FETCH_REPLIES_URI, $this->prepareDefaults($data)));
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new FetchRepliesRequest($data));
 
         return json_decode($response->getBody(), true);
     }
@@ -76,16 +65,12 @@ class MessageService extends AbstractService
      * 
      * @return array<string,string>
      * 
-     * @see \Macure\JojkaSDK\Http\Options\GetMessageIdsByCampaignIdOptions for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest for a list of available options.
      */
     public function getMessageIdsByCampaignId(array $data)
     {
-        $resolver = new OptionsResolver();
-        GetMessageIdsByCampaignIdOptions::configure($resolver);
-
-        $data = $resolver->resolve($data);
-
-        $response = $this->client->sendRequest(new Request(self::GET_MSG_IDS_BY_CAMPAIGN_ID_URI, $this->prepareDefaults($data)));
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new GetMessageIdsByCampaignIdRequest($data));
 
         return json_decode($response->getBody(), true);
     }
@@ -103,16 +88,12 @@ class MessageService extends AbstractService
      * 
      * @return array<string,string>
      * 
-     * @see \Macure\JojkaSDK\Http\Options\GetMessageStatusOptions for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest for a list of available options.
      */
     public function getMesageStatus(array $data)
     {
-        $resolver = new OptionsResolver();
-        GetMessageStatusOptions::configure($resolver);
-
-        $data = $resolver->resolve($data);
-
-        $response = $this->client->sendRequest(new Request(self::GET_MSG_STATUS_URI, $this->prepareDefaults($data)));
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new GetMessageStatusRequest($data));
 
         return json_decode($response->getBody(), true);
     }
@@ -133,16 +114,12 @@ class MessageService extends AbstractService
      * 
      * @return array<string,string>
      * 
-     * @see \Macure\JojkaSDK\Http\Options\SendOptions for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\SendRequest for a list of available options.
      */
     public function send(array $data)
     {
-        $resolver = new OptionsResolver();
-        SendOptions::configure($resolver);
-
-        $data = $resolver->resolve($data);
-
-        $response = $this->client->sendRequest(new Request(self::SEND_URI, $this->prepareDefaults($data)));
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new SendRequest($data));
 
         return json_decode($response->getBody(), true);
     }

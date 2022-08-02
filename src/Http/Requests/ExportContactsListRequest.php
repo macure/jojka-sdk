@@ -1,18 +1,20 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 /**
- * Export Contacts List Options 
+ * Export contacts list request 
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class ExportContactsListOptions
+class ExportContactsListRequest extends Request
 {
+    public const URI = parent::URI . '/export_contacts_list';
+    
     /**
      * Maximum number of contacts in this call.
      * Maximum value is 10000. If the parameter is not stated, the value will be 100.
@@ -29,14 +31,12 @@ class ExportContactsListOptions
     public const OFFSET = 'offset';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver
             ->setDefaults([self::MAX => 100, self::OFFSET => 0]);
 

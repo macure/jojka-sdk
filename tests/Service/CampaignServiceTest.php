@@ -5,11 +5,8 @@ namespace Macure\JojkaSDK\Tests\Service;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
-use Macure\JojkaSDK\Http\Requests\Request;
-use Macure\JojkaSDK\Service\CampaignService;
-use Macure\JojkaSDK\Http\Options\AddCampaignOptions;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Macure\JojkaSDK\Http\Options\GetCampaignRecipientsStatusOptions;
+use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
+use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 /**
@@ -29,17 +26,13 @@ class CampaignServiceTest extends TestCase
         $this->expectException(MissingOptionsException::class);
 
         $data = [
-            AddCampaignOptions::MSG       => 'hello',
-            AddCampaignOptions::SCHEDULED => '2016-05-31 12:18:52',
-            AddCampaignOptions::NAME      => 'test campaign'
+            AddCampaignRequest::MSG       => 'hello',
+            AddCampaignRequest::SCHEDULED => '2016-05-31 12:18:52',
+            AddCampaignRequest::NAME      => 'test campaign'
         ];
-
-        $resolver = new OptionsResolver();
         
-        AddCampaignOptions::configure($resolver);
-        
-        $resolver->resolve($data);
-    }
+        new AddCampaignRequest($data);        
+   }
     
     /**
      * Test adding campaign
@@ -51,20 +44,17 @@ class CampaignServiceTest extends TestCase
         $body = '{"campaign_id": "287359"}';
         
         $data = [
-            AddCampaignOptions::TO_MSISDN => '46709771337;46709966666',
-            AddCampaignOptions::MSG       => 'hello',
-            AddCampaignOptions::SCHEDULED => '2016-05-31 12:18:52',
-            AddCampaignOptions::NAME      => 'test campaign'
+            AddCampaignRequest::TO_MSISDN => '46709771337;46709966666',
+            AddCampaignRequest::MSG       => 'hello',
+            AddCampaignRequest::SCHEDULED => '2016-05-31 12:18:52',
+            AddCampaignRequest::NAME      => 'test campaign',
         ];
 
-        $resolver = new OptionsResolver();
-        $client   = new Client(['handler' => Helper::getMockHandler(200, $body)]);
-        
-        AddCampaignOptions::configure($resolver);
-        
-        $data = $resolver->resolve($data);
-        
-        $response = $client->sendRequest(new Request(CampaignService::ADD_CAMPAIGN_URI, $data));
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)
+        ]);
+
+        $response = $client->sendRequest(new AddCampaignRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
@@ -96,16 +86,14 @@ class CampaignServiceTest extends TestCase
                 ]';
 
         $data = [
-            GetCampaignRecipientsStatusOptions::CAMPAIGN_ID  => 287359
+            GetCampaignRecipientsStatusRequest::CAMPAIGN_ID  => 287359
         ];
 
-        $resolver = new OptionsResolver();
-        $client   = new Client(['handler' => Helper::getMockHandler(200, $body)]);
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)
+        ]);
 
-        GetCampaignRecipientsStatusOptions::configure($resolver);
-
-        $data     = $resolver->resolve($data);
-        $response = $client->sendRequest(new Request(CampaignService::GET_CAMPAIGN_RECIPIENTS_STATUS_URI, $data));
+        $response = $client->sendRequest(new GetCampaignRecipientsStatusRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());

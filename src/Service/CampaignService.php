@@ -2,10 +2,8 @@
 
 namespace Macure\JojkaSDK\Service;
 
-use Macure\JojkaSDK\Http\Requests\Request;
-use Macure\JojkaSDK\Http\Options\AddCampaignOptions;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Macure\JojkaSDK\Http\Options\GetCampaignRecipientsStatusOptions;
+use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
+use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
 
 /**
  * Campaign Service class
@@ -14,9 +12,6 @@ use Macure\JojkaSDK\Http\Options\GetCampaignRecipientsStatusOptions;
  */
 class CampaignService extends AbstractService
 {
-    public const ADD_CAMPAIGN_URI                   = '/add_campaign';
-    public const GET_CAMPAIGN_RECIPIENTS_STATUS_URI = '/get_campaign_recipients_status';
-
     /**
      * {@inheritDoc}
      * 
@@ -47,16 +42,12 @@ class CampaignService extends AbstractService
      *
      * @return array<string,mixed>
      * 
-     * @see \Macure\JojkaSDK\Http\Options\AddCampaignOptions for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\AddCampaignRequest for a list of available options.
      */
     public function addCampaign(array $data)
     {
-        $resolver = new OptionsResolver();
-        AddCampaignOptions::configure($resolver);
-
-        $data = $resolver->resolve($data);
-
-        $response = $this->client->sendRequest(new Request(self::ADD_CAMPAIGN_URI, $this->prepareDefaults($data)));
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new AddCampaignRequest($data));
 
         return json_decode($response->getBody(), true);
     }
@@ -74,16 +65,12 @@ class CampaignService extends AbstractService
      * 
      * @return array<string,mixed>
      * 
-     * @see \Macure\JojkaSDK\Http\Options\GetCampaignRecipientsStatusOptions for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest for a list of available options.
      */
     public function getCampaignRecipientsStatus(array $data)
     {
-        $resolver = new OptionsResolver();
-        GetCampaignRecipientsStatusOptions::configure($resolver);
-
-        $data = $resolver->resolve($data);
-
-        $response = $this->client->sendRequest(new Request(self::GET_CAMPAIGN_RECIPIENTS_STATUS_URI, $this->prepareDefaults($data)));
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new GetCampaignRecipientsStatusRequest($data));
 
         return json_decode($response->getBody(), true);
     }

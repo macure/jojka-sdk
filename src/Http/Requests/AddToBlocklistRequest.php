@@ -1,16 +1,18 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Add To Blocklist Options
+ * Add to blocklist request
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class AddToBlocklistOptions
+class AddToBlocklistRequest extends Request
 {
+    public const URI = parent::URI . '/add_to_blocklist';
+
     /**
      * Contact's mobile number.
      * 
@@ -19,14 +21,12 @@ class AddToBlocklistOptions
     public const MSISDN = 'msisdn';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver->setRequired(self::MSISDN);
     }
 }

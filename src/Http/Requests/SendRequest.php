@@ -1,18 +1,20 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 /**
- * Send options class
+ * Send request class
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class SendOptions
+class SendRequest extends Request
 {
+    public const URI = parent::URI . '/send';
+
     /**
      * A mobile number received by the SMS
      * 
@@ -42,14 +44,12 @@ class SendOptions
     public const FROM = 'from';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver
             ->setDefined(self::FROM)
             ->setRequired([self::TO, self::MSG]);

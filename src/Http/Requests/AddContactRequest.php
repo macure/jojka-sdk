@@ -1,16 +1,19 @@
-<?php 
+<?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
+use DateTime;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Add Contact Options 
+ * Add contact request
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class AddContactOptions
+class AddContactRequest extends Request
 {
+    public const URI = parent::URI . '/add_contact';
+
     /**
      * Contact's mobile number. 
      * 
@@ -27,18 +30,18 @@ class AddContactOptions
 
     /**
      * One or several group names to share the contact, separated by semi-colon.
+     * 
+     * Optional.
      */
     public const GROUP = 'group';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+
         $resolver
             ->setRequired([self::MSISDN, self::NAME])
             ->setDefined([

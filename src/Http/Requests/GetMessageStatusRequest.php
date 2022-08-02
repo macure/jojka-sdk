@@ -1,16 +1,18 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Get message status pptions class
+ * Get message status request class
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class GetMessageStatusOptions
+class GetMessageStatusRequest extends Request
 {
+    public const URI = parent::URI . '/get_msg_status';
+
     /**
      * The ID of the SMS whose status is requested.
      * 
@@ -25,8 +27,10 @@ class GetMessageStatusOptions
      *
      * @return void
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver->setRequired(self::MSG_ID);
     }
 }

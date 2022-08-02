@@ -1,16 +1,18 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Get groups from msisdn options class
+ * Remove from blocklist options
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class GetGroupsFromMsisdnOptions
+class RemoveFromBlocklistrequest extends Request
 {
+    public const URI = parent::URI . '/rm_from_blocklist';
+
     /**
      * Contact's mobile number.
      * 
@@ -19,14 +21,12 @@ class GetGroupsFromMsisdnOptions
     public const MSISDN = 'msisdn';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver->setRequired(self::MSISDN);
     }
 }

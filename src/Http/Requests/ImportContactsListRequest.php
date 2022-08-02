@@ -1,18 +1,20 @@
 <?php
 
-namespace Macure\JojkaSDK\Http\Options;
+namespace Macure\JojkaSDK\Http\Requests;
 
-use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 /**
- * Import contacts list options class
+ * Import contacts list request class
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class ImportContactsListOptions
+class ImportContactsListRequest extends Request
 {
+    public const URI = parent::URI . '/import_contacts_list';
+
     /**
      * CSV formatted string. Encoding: UTF-8 
      * Line break: \n 
@@ -34,14 +36,12 @@ class ImportContactsListOptions
     public const CONTACTS_LIST_URL = 'contacts_list_url';
 
     /**
-     * Configure options
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public static function configure(OptionsResolver $resolver) 
+    protected function configure(OptionsResolver $resolver) 
     {
+        parent::configure($resolver);
+        
         $resolver
             ->setDefined([self::CONTACTS_LIST, self::CONTACTS_LIST_URL])
             ->setDefaults([

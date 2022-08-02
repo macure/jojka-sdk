@@ -3,6 +3,7 @@
 namespace Macure\JojkaSDK\Http\Requests;
 
 use GuzzleHttp\Psr7\Request as BaseRequest;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Request
@@ -17,16 +18,38 @@ class Request extends BaseRequest
     public const URI = '/websms/api';
 
     /**
+     * The parameter API_key ​ must be sent in all calls.
+     * 
+     * Required.
+     */
+    public const API_KEY = 'API_key';
+
+    /**
      * Constructor
      *
-     * @param string $uri
      * @param array<string,mixed> $data
      * 
      */
-    public function __construct($uri, $data)
+    public function __construct($data)
     {
-        $data = array_filter($data);
+        $resolver = new OptionsResolver();
+        $data     = array_filter($data);
 
-        parent::__construct('POST', Request::URI . $uri, [], http_build_query($data));
+        $this->configure($resolver);
+        $data = $resolver->resolve($data);
+
+        parent::__construct('POST', static::URI, [], http_build_query($data));
+    }
+
+    /**
+     * Configure options
+     *
+     * @param OptionsResolver $resolver
+     *
+     * @return void
+     */
+    protected function configure(OptionsResolver $resolver) 
+    {
+        $resolver->setDefined(Request::API_KEY);
     }
 }

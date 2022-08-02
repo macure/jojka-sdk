@@ -5,13 +5,10 @@ namespace Macure\JojkaSDK\Tests\Service;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
-use Macure\JojkaSDK\Http\Requests\Request;
-use Macure\JojkaSDK\Service\MessageService;
-use Macure\JojkaSDK\Http\Options\SendOptions;
-use Macure\JojkaSDK\Http\Options\FetchRepliesOptions;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Macure\JojkaSDK\Http\Options\GetMessageStatusOptions;
-use Macure\JojkaSDK\Http\Options\GetMessageIdsByCampaignIdOptions;
+use Macure\JojkaSDK\Http\Requests\SendRequest;
+use Macure\JojkaSDK\Http\Requests\FetchRepliesRequest;
+use Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest;
+use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
 
 /**
  * Message Service test class
@@ -41,17 +38,15 @@ class MessageServiceTest extends TestCase
                 ]';
 
         $data = [
-            FetchRepliesOptions::FROM_MSISDN => '46709771337',
-            FetchRepliesOptions::SINCE_TIME  => '2016-05-31 13:00:06'
+            FetchRepliesRequest::FROM_MSISDN => '46709771337',
+            FetchRepliesRequest::SINCE_TIME  => '2016-05-31 13:00:06'
         ];
 
-        $resolver = new OptionsResolver();
-        $client   = new Client(['handler' => Helper::getMockHandler(200, $body)]);
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)
+        ]);
 
-        FetchRepliesOptions::configure($resolver);
-
-        $data     = $resolver->resolve($data);
-        $response = $client->sendRequest(new Request(MessageService::FETCH_REPLIES_URI, $data));
+        $response = $client->sendRequest(new FetchRepliesRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
@@ -67,16 +62,14 @@ class MessageServiceTest extends TestCase
         $body = '["116690255","116690256"]';
 
         $data = [
-            GetMessageIdsByCampaignIdOptions::CAMPAIGN_ID => 287359,
+            GetMessageIdsByCampaignIdRequest::CAMPAIGN_ID => 287359,
         ];
 
-        $resolver = new OptionsResolver();
-        $client   = new Client(['handler' => Helper::getMockHandler(200, $body)]);
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)
+        ]);
 
-        GetMessageIdsByCampaignIdOptions::configure($resolver);
-
-        $data     = $resolver->resolve($data);
-        $response = $client->sendRequest(new Request(MessageService::GET_MSG_IDS_BY_CAMPAIGN_ID_URI, $data));
+        $response = $client->sendRequest(new GetMessageIdsByCampaignIdRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
@@ -92,16 +85,14 @@ class MessageServiceTest extends TestCase
         $body = '["DELIVERED"]';
 
         $data = [
-            GetMessageStatusOptions::MSG_ID => 116690255,
+            GetMessageStatusRequest::MSG_ID => 116690255,
         ];
 
-        $resolver = new OptionsResolver();
-        $client   = new Client(['handler' => Helper::getMockHandler(200, $body)]);
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)]
+        );
 
-        GetMessageStatusOptions::configure($resolver);
-
-        $data     = $resolver->resolve($data);
-        $response = $client->sendRequest(new Request(MessageService::GET_MSG_STATUS_URI, $data));
+        $response = $client->sendRequest(new GetMessageStatusRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
@@ -117,17 +108,15 @@ class MessageServiceTest extends TestCase
         $body = '{"message_id": "116690855"}';
 
         $data = [
-            SendOptions::TO  => '46709771337',
-            SendOptions::MSG => 'hello world'
+            SendRequest::TO  => '46709771337',
+            SendRequest::MSG => 'hello world'
         ];
 
-        $resolver = new OptionsResolver();
-        $client   = new Client(['handler' => Helper::getMockHandler(200, $body)]);
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)
+        ]);
 
-        SendOptions::configure($resolver);
-
-        $data     = $resolver->resolve($data);
-        $response = $client->sendRequest(new Request(MessageService::SEND_URI, $data));
+        $response = $client->sendRequest(new SendRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
