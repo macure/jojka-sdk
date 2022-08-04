@@ -4,6 +4,10 @@ namespace Macure\JojkaSDK\Http\Requests;
 
 use GuzzleHttp\Psr7\Request as BaseRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
+use Macure\JojkaSDK\Exceptions\MissingOptionsException;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException as ResolverInvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException as ResolverMissingOptionsException;
 
 /**
  * Request
@@ -36,7 +40,16 @@ class Request extends BaseRequest
         $data     = array_filter($data);
 
         $this->configure($resolver);
-        $data = $resolver->resolve($data);
+        
+        try {
+            $data = $resolver->resolve($data);
+        }
+        catch (ResolverInvalidOptionsException $e) {
+            throw new InvalidOptionsException($e->getMessage());
+        }
+        catch (ResolverMissingOptionsException $e) {
+            throw new MissingOptionsException($e->getMessage());
+        }
 
         parent::__construct('POST', static::URI, [], http_build_query($data));
     }

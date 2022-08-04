@@ -108,7 +108,7 @@ class AddCampaignRequest extends Request
             })
 
             ->setNormalizer(self::FROM, function (Options $options, $value) {
-                if (preg_match('/[a-zA-Z0-9-_]*/m', $value) && strlen($value) <= 11) {
+                if (preg_match('/^[a-zA-Z0-9-_]+$/m', $value) && strlen($value) <= 11) {
                     return $value;
                 }
 

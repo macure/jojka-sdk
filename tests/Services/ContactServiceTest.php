@@ -1,8 +1,9 @@
 <?php
 
-namespace Macure\JojkaSDK\Tests\Service;
+namespace Macure\JojkaSDK\Tests\Services;
 
 use GuzzleHttp\Client;
+use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
 use Macure\JojkaSDK\Http\Requests\AddContactRequest;
@@ -23,6 +24,23 @@ use Macure\JojkaSDK\Http\Requests\RemoveContactFromGroupRequest;
  */
 class ContactServiceTest extends TestCase
 {
+    /**
+     * Test should throw exceptions for invalid arguments
+     *
+     * @return void
+     */
+    public function testShouldThrowExceptionForInvalidArguments()
+    {
+        $this->expectException(InvalidOptionsException::class);
+
+        $data = [
+            ExportContactsListRequest::MAX    => 10001,
+            ExportContactsListRequest::OFFSET => 0,
+        ];
+        
+        new ExportContactsListRequest($data);        
+   }
+   
     /**
      * Test Should add Contact
      *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Macure\JojkaSDK\Service;
+namespace Macure\JojkaSDK\Services;
 
 use Macure\JojkaSDK\Http\Requests\AddContactRequest;
 use Macure\JojkaSDK\Http\Requests\InBlocklistRequest;
@@ -41,7 +41,7 @@ class ContactService extends AbstractService
      * 
      *      $api->addContact([
      *          'msisdn' => '46709771337',
-     *          'name'   => 'Lilleman'
+     *          'name'   => 'Lilleman',
      *          'group'  => 'Utvecklare;Jojka personal',
      *      ]);
      *

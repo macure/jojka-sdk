@@ -2,19 +2,19 @@
 namespace Macure\JojkaSDK;
 
 use GuzzleHttp\Client;
-use Macure\JojkaSDK\Service\ContactService;
-use Macure\JojkaSDK\Service\MessageService;
-use Macure\JojkaSDK\Service\CampaignService;
+use Macure\JojkaSDK\Services\ContactService;
+use Macure\JojkaSDK\Services\MessageService;
+use Macure\JojkaSDK\Services\CampaignService;
 
 /**
- * SDK class
+ * JojkaSDK class
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-final class SDK 
+final class JojkaSDK 
 {
     /**
-     * Contact Endpoint
+     * Contact Service
      *
      * @var ContactService
      */
@@ -28,7 +28,7 @@ final class SDK
     public $campaign;
 
     /**
-     * Campaign Service
+     * Message Service
      *
      * @var MessageService
      */
@@ -39,14 +39,14 @@ final class SDK
      * 
      * Here's an example
      * 
-     *      $api = new \Macure\JojkaSDK\SDK([
+     *      $api = new \Macure\JojkaSDK\JojkaSDK([
      *          'API_key' => 'foobar'
      *      ]);
      * 
      * @param array<string,mixed> $config 
      * @param Client              $client
      */
-    public function __construct(array $config, $client = null)
+    public function __construct(array $config = [], $client = null)
     {
         $this->contact  = new ContactService($config, $client);
         $this->campaign = new CampaignService($config, $client);

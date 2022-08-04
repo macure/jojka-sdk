@@ -1,8 +1,10 @@
 <?php
 
-namespace Macure\JojkaSDK\Tests\Service;
+namespace Macure\JojkaSDK\Tests\Services;
 
 use GuzzleHttp\Client;
+use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
+use Macure\JojkaSDK\Exceptions\MissingOptionsException;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
 use Macure\JojkaSDK\Http\Requests\SendRequest;
@@ -17,6 +19,40 @@ use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
  */
 class MessageServiceTest extends TestCase
 {
+    /**
+     * Test should throw exceptions for missing arguments
+     *
+     * @return void
+     */
+    public function testShouldThrowExceptionForMissingArguments()
+    {
+        $this->expectException(MissingOptionsException::class);
+
+        $data = [
+            SendRequest::MSG  => 'hello'
+        ];
+        
+        new SendRequest($data);        
+   }
+
+   /**
+     * Test should throw exceptions for invalid arguments
+     *
+     * @return void
+     */
+    public function testShouldThrowExceptionForInvalidArguments()
+    {
+        $this->expectException(InvalidOptionsException::class);
+
+        $data = [
+            SendRequest::TO   => '46709771337',
+            SendRequest::FROM => 'jojka!',
+            SendRequest::MSG  => 'hello'
+        ];
+        
+        new SendRequest($data);        
+   }
+   
     /**
      * Test should fetch replies
      *

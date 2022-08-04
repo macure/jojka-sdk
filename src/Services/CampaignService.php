@@ -1,6 +1,6 @@
 <?php
 
-namespace Macure\JojkaSDK\Service;
+namespace Macure\JojkaSDK\Services;
 
 use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
 use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
