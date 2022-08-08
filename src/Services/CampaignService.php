@@ -2,8 +2,10 @@
 
 namespace Macure\JojkaSDK\Services;
 
+use Macure\JojkaSDK\Http\Response\CampaignResponse;
 use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
 use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
+use Macure\JojkaSDK\Http\Response\CampaignRecipientsStatusResponse;
 
 /**
  * Campaign Service class
@@ -40,7 +42,7 @@ class CampaignService extends AbstractService
      *
      * @param array<string,mixed> $data
      *
-     * @return array<string,mixed>
+     * @return CampaignResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\AddCampaignRequest for a list of available options.
      */
@@ -49,7 +51,7 @@ class CampaignService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new AddCampaignRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new CampaignResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -63,7 +65,7 @@ class CampaignService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,mixed>
+     * @return CampaignRecipientsStatusResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest for a list of available options.
      */
@@ -72,6 +74,6 @@ class CampaignService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new GetCampaignRecipientsStatusRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new CampaignRecipientsStatusResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 }

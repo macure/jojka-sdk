@@ -2,8 +2,11 @@
 
 namespace Macure\JojkaSDK\Services;
 
+use Macure\JojkaSDK\Http\Response\ContactResponse;
+use Macure\JojkaSDK\Http\Response\SuccessResponse;
 use Macure\JojkaSDK\Http\Requests\AddContactRequest;
 use Macure\JojkaSDK\Http\Requests\InBlocklistRequest;
+use Macure\JojkaSDK\Http\Response\ContactListResponse;
 use Macure\JojkaSDK\Http\Requests\RemoveContactRequest;
 use Macure\JojkaSDK\Http\Requests\AddToBlocklistRequest;
 use Macure\JojkaSDK\Http\Requests\AddContactToGroupRequest;
@@ -47,7 +50,7 @@ class ContactService extends AbstractService
      *
      * @param array<string,mixed> $data
      *
-     * @return array<string,mixed>
+     * @return ContactResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\AddContactRequest for a list of available options.
      */
@@ -56,7 +59,7 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new AddContactRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new ContactResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -70,7 +73,7 @@ class ContactService extends AbstractService
      *
      * @param array<string,mixed> $data
      *
-     * @return array<string,mixed>
+     * @return SuccessResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\RemoveContactRequest for a list of available options.
      */
@@ -79,7 +82,7 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new RemoveContactRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -95,7 +98,7 @@ class ContactService extends AbstractService
      * 
      * @param array<string,string> $data
      * 
-     * @return array<string,string>
+     * @return ContactResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\AddContactToGroupRequest for a list of available options.
      */
@@ -104,9 +107,9 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new AddContactToGroupRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new ContactResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
-
+    
     /**
      * Unmark a contact as a member of a group
      *
@@ -119,7 +122,7 @@ class ContactService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return ContactResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\RemoveContactFromGroupRequest for a list of available options.
      */
@@ -128,7 +131,7 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new RemoveContactFromGroupRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new ContactResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -141,9 +144,9 @@ class ContactService extends AbstractService
      *          'offset' => 0,
      *      ]);
      * 
-     * @param array<string,string> $data
+     * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return ContactListResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\ExportContactsListRequest for a list of available options.
      */
@@ -152,7 +155,7 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new ExportContactsListRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new ContactListResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**

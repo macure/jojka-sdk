@@ -43,7 +43,7 @@ abstract class AbstractService
             $this->config = $resolver->resolve($config);
         }
         catch (Exception $e) {
-            throw new MissingConfigurationException('The required option "API_key" is missing');
+            throw new MissingConfigurationException('The required option "API_key" is missing', $e->getCode(), $e->getPrevious());
         }
 
         $this->client = $client ?: new \GuzzleHttp\Client([

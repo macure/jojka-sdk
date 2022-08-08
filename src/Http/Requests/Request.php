@@ -45,10 +45,10 @@ class Request extends BaseRequest
             $data = $resolver->resolve($data);
         }
         catch (ResolverInvalidOptionsException $e) {
-            throw new InvalidOptionsException($e->getMessage());
+            throw new InvalidOptionsException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
         catch (ResolverMissingOptionsException $e) {
-            throw new MissingOptionsException($e->getMessage());
+            throw new MissingOptionsException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
 
         parent::__construct('POST', static::URI, [], http_build_query($data));

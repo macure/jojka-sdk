@@ -187,7 +187,7 @@ class ContactServiceTest extends TestCase
                             "msisdn": "46709966666",
                             "name": "Rutger Lindquist",
                             "groups": [
-                            "VD"
+                                "VD"
                             ]
                         }
                     ]

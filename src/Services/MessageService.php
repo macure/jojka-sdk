@@ -2,7 +2,10 @@
 
 namespace Macure\JojkaSDK\Services;
 
+use Macure\JojkaSDK\Http\Response\Response;
 use Macure\JojkaSDK\Http\Requests\SendRequest;
+use Macure\JojkaSDK\Http\Response\MessageResponse;
+use Macure\JojkaSDK\Transformers\MessageTransformer;
 use Macure\JojkaSDK\Http\Requests\FetchRepliesRequest;
 use Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest;
 use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
@@ -112,7 +115,7 @@ class MessageService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return MessageResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\SendRequest for a list of available options.
      */
@@ -121,6 +124,6 @@ class MessageService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new SendRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new MessageResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 }
