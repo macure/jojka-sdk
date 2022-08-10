@@ -2,10 +2,12 @@
 
 namespace Macure\JojkaSDK\Services;
 
+use Macure\JojkaSDK\Http\Response\SuccessResponse;
 use Macure\JojkaSDK\Http\Response\CampaignResponse;
 use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
-use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
+use Macure\JojkaSDK\Http\Requests\CancelCampaignRequest;
 use Macure\JojkaSDK\Http\Response\CampaignRecipientsStatusResponse;
+use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
 
 /**
  * Campaign Service class
@@ -52,6 +54,29 @@ class CampaignService extends AbstractService
         $response = $this->client->sendRequest(new AddCampaignRequest($data));
 
         return new CampaignResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
+    }
+
+    /**
+     * Cancel a previously scheduled campaign
+     *
+     * Here's an example
+     * 
+     *      $api->cancelCampaign([
+     *          'campaign_id' => 287359,
+     *      ]);
+     * 
+     * @param array<string,mixed> $data
+     * 
+     * @return SuccessResponse
+     * 
+     * @see \Macure\JojkaSDK\Http\Requests\CancelCampaignRequest for a list of available options.
+     */
+    public function cancelCampaign(array $data)
+    {
+        $data     = $this->prepareDefaults($data);
+        $response = $this->client->sendRequest(new CancelCampaignRequest($data));
+
+        return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**

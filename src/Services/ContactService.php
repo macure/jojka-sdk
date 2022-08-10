@@ -2,6 +2,9 @@
 
 namespace Macure\JojkaSDK\Services;
 
+use GuzzleHttp\Psr7\Utils;
+use Macure\JojkaSDK\Http\Response\ArrayResponse;
+use Macure\JojkaSDK\Http\Response\BooleanResponse;
 use Macure\JojkaSDK\Http\Response\ContactResponse;
 use Macure\JojkaSDK\Http\Response\SuccessResponse;
 use Macure\JojkaSDK\Http\Requests\AddContactRequest;
@@ -13,7 +16,7 @@ use Macure\JojkaSDK\Http\Requests\AddContactToGroupRequest;
 use Macure\JojkaSDK\Http\Requests\ExportContactsListRequest;
 use Macure\JojkaSDK\Http\Requests\ImportContactsListRequest;
 use Macure\JojkaSDK\Http\Requests\GetGroupsFromMsisdnRequest;
-use Macure\JojkaSDK\Http\Requests\RemoveFromBlocklistrequest;
+use Macure\JojkaSDK\Http\Requests\RemoveFromBlocklistRequest;
 use Macure\JojkaSDK\Http\Requests\RemoveContactFromGroupRequest;
 
 /**
@@ -172,7 +175,7 @@ class ContactService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return SuccessResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\ImportContactsListRequest for a list of available options.
      */
@@ -181,7 +184,7 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new ImportContactsListRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -195,7 +198,7 @@ class ContactService extends AbstractService
      *
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return ArrayResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\GetGroupsFromMsisdnRequest for a list of available options.
      */
@@ -204,7 +207,12 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new GetGroupsFromMsisdnRequest($data));
 
-        return json_decode($response->getBody(), true);
+        $array = json_decode($response->getBody(), true);
+        
+        $stream = Utils::streamFor();
+        $stream->write((string) json_encode($array['groups'] ?? []));
+
+        return new ArrayResponse($response->getStatusCode(), $response->getHeaders(), $stream);
     }
 
     /**
@@ -218,16 +226,16 @@ class ContactService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return SuccessResponse
      * 
-     * @see \Macure\JojkaSDK\Http\Requests\RemoveFromBlocklistrequest for a list of available options.
+     * @see \Macure\JojkaSDK\Http\Requests\RemoveFromBlocklistRequest for a list of available options.
      */
     public function removeFromBlocklist(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new RemoveFromBlocklistrequest($data));
+        $response = $this->client->sendRequest(new RemoveFromBlocklistRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -241,7 +249,7 @@ class ContactService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return SuccessResponse
      * 
      * @see \Macure\JojkaSDK\Http\Request\AddToBlocklistRequest for a list of available options.
      */
@@ -250,7 +258,7 @@ class ContactService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new AddToBlocklistRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -264,7 +272,7 @@ class ContactService extends AbstractService
      * 
      * @param array<string,mixed> $data
      * 
-     * @return array<string,string>
+     * @return BooleanResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\InBlocklistRequest for a list of available options.
      */
@@ -273,6 +281,11 @@ class ContactService extends AbstractService
         $data = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new InBlocklistRequest($data));
 
-        return json_decode($response->getBody(), true);
+        $array = json_decode($response->getBody(), true);
+        
+        $stream = Utils::streamFor();
+        $stream->write((string) json_encode($array['in_blocklist'] ?? false));
+
+        return new BooleanResponse($response->getStatusCode(), $response->getHeaders(), $stream);
     }
 }

@@ -19,7 +19,7 @@ class Campaign
      * 
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
      * Get iD

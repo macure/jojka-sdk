@@ -2,8 +2,6 @@
 
 namespace Macure\JojkaSDK\Http\Response;
 
-use Macure\JojkaSDK\Models\Success;
-
 /**
  * Success Response
  * 
@@ -16,21 +14,17 @@ class SuccessResponse extends Response
      *
      * @var string
      */
-    protected $deserializeType = Success::class;
+    protected $deserializeType = 'array';
 
     /**
      * {@inheritDoc}
      *
-     * @return Success
+     * @return bool
      */
     public function deserialize($format = self::JSON)
     {
-        $object = parent::deserialize($format);
+        $array = parent::deserialize($format);
 
-        if (! $object instanceof Success) {
-            $this->throwDeserializationException($format);
-        }
-
-        return $object;
+        return "done" === ($array['successes'] ?? false);
     }
 }

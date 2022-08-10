@@ -5,20 +5,20 @@ namespace Macure\JojkaSDK\Http\Requests;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Remove from blocklist options
+ * Cancel campaign request class
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class RemoveFromBlocklistrequest extends Request
+class CancelCampaignRequest extends Request
 {
-    public const URI = parent::URI . '/rm_from_blocklist';
-
+    public const URI = parent::URI . '/cancel_campaign';
+    
     /**
-     * Contact's mobile number.
+     * Campaign ID that you have got when you've sent a campaign.
      * 
      * Required.
      */
-    public const MSISDN = 'msisdn';
+    public const CAMPAIGN_ID = 'campaign_id';
 
     /**
      * {@inheritDoc}
@@ -27,6 +27,6 @@ class RemoveFromBlocklistrequest extends Request
     {
         parent::configure($resolver);
         
-        $resolver->setRequired(self::MSISDN);
+        $resolver->setRequired(self::CAMPAIGN_ID);
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Macure\JojkaSDK\Services;
 
-use Macure\JojkaSDK\Http\Response\Response;
 use Macure\JojkaSDK\Http\Requests\SendRequest;
+use Macure\JojkaSDK\Http\Response\ArrayResponse;
 use Macure\JojkaSDK\Http\Response\MessageResponse;
-use Macure\JojkaSDK\Transformers\MessageTransformer;
+use Macure\JojkaSDK\Http\Response\ReplyListResponse;
 use Macure\JojkaSDK\Http\Requests\FetchRepliesRequest;
+use Macure\JojkaSDK\Http\Response\MessageStatusReponse;
 use Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest;
 use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
 
@@ -43,7 +44,7 @@ class MessageService extends AbstractService
      * 
      * @param array<string,string> $data
      * 
-     * @return array<string,string>
+     * @return ReplyListResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\FetchRepliesRequest for a list of available options.
      */
@@ -52,11 +53,11 @@ class MessageService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new FetchRepliesRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new ReplyListResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
-     * Fetch all SMS IDs for a particular campaign ID. 6
+     * Fetch all SMS IDs for a particular campaign ID.
      *
      * Here's an example
      * 
@@ -64,9 +65,9 @@ class MessageService extends AbstractService
      *          'campaign_id' => 287359,
      *      ]);
      * 
-     * @param array<string,string> $data
+     * @param array<string,int> $data
      * 
-     * @return array<string,string>
+     * @return ArrayResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest for a list of available options.
      */
@@ -75,7 +76,7 @@ class MessageService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new GetMessageIdsByCampaignIdRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new ArrayResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**
@@ -83,25 +84,23 @@ class MessageService extends AbstractService
      *
      * Here's an example
      * 
-     *      $api->getMesageStatus([
+     *      $api->getMessageStatus([
      *          'msg_id' => 116690255,
      *      ]);
      * 
-     * @param array<string,string> $data
+     * @param array<string,int> $data
      * 
-     * @return array<string,string>
+     * @return MessageStatusReponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest for a list of available options.
      */
-    public function getMesageStatus(array $data)
+    public function getMessageStatus(array $data)
     {
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new GetMessageStatusRequest($data));
 
-        return json_decode($response->getBody(), true);
+        return new MessageStatusReponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
-
-    
 
     /**
      * Send an SMS to a recipient

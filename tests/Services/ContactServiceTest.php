@@ -3,18 +3,18 @@
 namespace Macure\JojkaSDK\Tests\Services;
 
 use GuzzleHttp\Client;
-use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
 use Macure\JojkaSDK\Http\Requests\AddContactRequest;
 use Macure\JojkaSDK\Http\Requests\InBlocklistRequest;
+use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use Macure\JojkaSDK\Http\Requests\RemoveContactRequest;
 use Macure\JojkaSDK\Http\Requests\AddToBlocklistRequest;
 use Macure\JojkaSDK\Http\Requests\AddContactToGroupRequest;
 use Macure\JojkaSDK\Http\Requests\ExportContactsListRequest;
 use Macure\JojkaSDK\Http\Requests\ImportContactsListRequest;
 use Macure\JojkaSDK\Http\Requests\GetGroupsFromMsisdnRequest;
-use Macure\JojkaSDK\Http\Requests\RemoveFromBlocklistrequest;
+use Macure\JojkaSDK\Http\Requests\RemoveFromBlocklistRequest;
 use Macure\JojkaSDK\Http\Requests\RemoveContactFromGroupRequest;
 
 /**
@@ -248,7 +248,7 @@ class ContactServiceTest extends TestCase
             'handler' => Helper::getMockHandler(200, $body)
         ]);
 
-        $response = $client->sendRequest(new RemoveFromBlocklistrequest($data)); 
+        $response = $client->sendRequest(new RemoveFromBlocklistRequest($data)); 
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());

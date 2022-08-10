@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
 use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
 use Macure\JojkaSDK\Exceptions\MissingOptionsException;
+use Macure\JojkaSDK\Http\Requests\CancelCampaignRequest;
 use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
 
 /**
@@ -75,6 +76,29 @@ class CampaignServiceTest extends TestCase
         ]);
 
         $response = $client->sendRequest(new AddCampaignRequest($data));
+
+        $this->assertEquals($body, $response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * Test should cancel campaign
+     *
+     * @return void
+     */
+    public function testShouldCancelCampaign()
+    {
+        $body = '{"successes": "done"}';
+
+        $data = [
+            CancelCampaignRequest::CAMPAIGN_ID => 287359
+        ];
+
+        $client = new Client([
+            'handler' => Helper::getMockHandler(200, $body)
+        ]);
+
+        $response = $client->sendRequest(new CancelCampaignRequest($data));
 
         $this->assertEquals($body, $response->getBody());
         $this->assertEquals(200, $response->getStatusCode());

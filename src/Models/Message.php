@@ -11,6 +11,10 @@ use JMS\Serializer\Annotation as JMS;
  */
 class Message
 {
+    public const STATUS_SENT = 'SENT';
+    public const STATUS_ERROR = 'ERROR';
+    public const STATUS_DELIVERED = 'DELIVERED';
+    
     /**
      * ID
      * 
@@ -19,7 +23,7 @@ class Message
      * 
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
      * Get iD

@@ -18,7 +18,7 @@ class Contact
      * 
      * @var string
      */
-    protected $msisdn;
+    private $msisdn;
 
     /**
      * Name
@@ -27,7 +27,7 @@ class Contact
      * 
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * Groups
@@ -36,7 +36,7 @@ class Contact
      * 
      * @var string[]
      */
-    protected $groups;
+    private $groups;
 
     /**
      * Get id
