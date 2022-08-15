@@ -7,7 +7,7 @@ use Macure\JojkaSDK\Http\Response\ArrayResponse;
 use Macure\JojkaSDK\Http\Response\MessageResponse;
 use Macure\JojkaSDK\Http\Response\ReplyListResponse;
 use Macure\JojkaSDK\Http\Requests\FetchRepliesRequest;
-use Macure\JojkaSDK\Http\Response\MessageStatusReponse;
+use Macure\JojkaSDK\Http\Response\MessageStatusResponse;
 use Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest;
 use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
 
@@ -90,7 +90,7 @@ class MessageService extends AbstractService
      * 
      * @param array<string,int> $data
      * 
-     * @return MessageStatusReponse
+     * @return MessageStatusResponse
      * 
      * @see \Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest for a list of available options.
      */
@@ -99,7 +99,7 @@ class MessageService extends AbstractService
         $data     = $this->prepareDefaults($data);
         $response = $this->client->sendRequest(new GetMessageStatusRequest($data));
 
-        return new MessageStatusReponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
+        return new MessageStatusResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
     /**

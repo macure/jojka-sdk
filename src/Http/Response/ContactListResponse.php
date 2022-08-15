@@ -27,13 +27,13 @@ class ContactListResponse extends Response
      */
     public function deserialize($format = self::JSON)
     {
-        $object = parent::deserialize($format);
-        
-        if (! is_array($object)) {
+        $array = parent::deserialize($format);
+                
+        if (empty($array) || ! is_array($array) ) {
             $this->throwDeserializationException($format);
         }
 
-        return $object;
+        return $array;
     }
 
     /**
@@ -43,13 +43,10 @@ class ContactListResponse extends Response
     {
         $array = json_decode(parent::getBody(), true);
 
-        if (key_exists('export', $array)) {
+        if (is_array($array) && key_exists('export', $array)) {
             $array = $array['export'];
         }
 
-        $stream = Utils::streamFor();
-        $stream->write((string) json_encode($array));
-
-        return $stream;
+        return Utils::streamFor($array ? (string) json_encode($array) : "");;
     }
 }

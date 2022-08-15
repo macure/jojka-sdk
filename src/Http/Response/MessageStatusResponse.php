@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamInterface;
  * 
  * @author Vladimir Simic <vladimir.simic@prodevcon.ch>
  */
-class MessageStatusReponse extends Response
+class MessageStatusResponse extends Response
 {
     /**
      * Deserialize type
@@ -40,9 +40,6 @@ class MessageStatusReponse extends Response
             $array = reset($array);
         }
 
-        $stream = Utils::streamFor();
-        $stream->write((string) json_encode($array));
-
-        return $stream;
+        return Utils::streamFor($array ? (string) json_encode($array) : "");
     }
 }

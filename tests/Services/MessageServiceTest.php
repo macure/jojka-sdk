@@ -13,7 +13,7 @@ use Macure\JojkaSDK\Http\Response\ReplyListResponse;
 use Macure\JojkaSDK\Http\Requests\FetchRepliesRequest;
 use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use Macure\JojkaSDK\Exceptions\MissingOptionsException;
-use Macure\JojkaSDK\Http\Response\MessageStatusReponse;
+use Macure\JojkaSDK\Http\Response\MessageStatusResponse;
 use Macure\JojkaSDK\Http\Requests\GetMessageStatusRequest;
 use Macure\JojkaSDK\Http\Requests\GetMessageIdsByCampaignIdRequest;
 
@@ -137,7 +137,7 @@ class MessageServiceTest extends TestCase
             GetMessageStatusRequest::MSG_ID => 116690255,
         ]);
 
-        $this->assertInstanceOf(MessageStatusReponse::class, $response);
+        $this->assertInstanceOf(MessageStatusResponse::class, $response);
     }
 
     /**

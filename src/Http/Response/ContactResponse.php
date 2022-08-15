@@ -43,14 +43,11 @@ class ContactResponse extends Response
     {
         $array = json_decode(parent::getBody(), true);
 
-        if (key_exists('group', $array)) {
+        if (is_array($array) && key_exists('group', $array)) {
             $array['groups'] = [$array['group']];
             unset($array['group']);
         }
 
-        $stream = Utils::streamFor();
-        $stream->write((string) json_encode($array));
-
-        return $stream;
+        return Utils::streamFor($array ? (string) json_encode($array) : "");
     }
 }

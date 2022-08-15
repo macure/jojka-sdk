@@ -16,20 +16,28 @@ class ImportContactsListRequest extends Request
     public const URI = parent::URI . '/import_contacts_list';
 
     /**
-     * CSV formatted string. Encoding: UTF-8 
-     * Line break: \n 
-     * Separators: , or ;
-     * Text limiter: is missing
+     * Array containg following keys: 'msisdn', 'name' and 'groups'.
+     * [
+     *     'msisdn' => string,
+     *     'name'   => string,
+     *     'groups' => string[]
+     * ]
      * 
-     * Columns:msisdn;name;group1;group2;group3;…
-     * Note that because the text limiter is missing, the characters "," and ";" must not be used in any fields.
      * 
      * Required as alternative.
      */
     public const CONTACTS_LIST = 'contacts_list';
 
     /**
-     * A URL that points to a CSV formatted string according to the above specification.
+     * A URL that points to a CSV formatted string.
+     * 
+     * Encoding: UTF-8 
+     * Line break: \n 
+     * Separators: , or ;
+     * Text limiter: is missing
+     * 
+     * Columns:msisdn;name;group1;group2;group3;…
+     * Note that because the text limiter is missing, the characters "," and ";" must not be used in any fields.
      * 
      * Required as alternative.
      */
