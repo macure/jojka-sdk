@@ -3,12 +3,14 @@
 namespace Macure\JojkaSDK\Tests\Services;
 
 use GuzzleHttp\Client;
-use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
+use Macure\JojkaSDK\Services\CampaignService;
+use Macure\JojkaSDK\Http\Response\SuccessResponse;
+use Macure\JojkaSDK\Http\Response\CampaignResponse;
 use Macure\JojkaSDK\Http\Requests\AddCampaignRequest;
-use Macure\JojkaSDK\Exceptions\MissingOptionsException;
 use Macure\JojkaSDK\Http\Requests\CancelCampaignRequest;
+use Macure\JojkaSDK\Http\Response\CampaignRecipientsStatusResponse;
 use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
 
 /**
@@ -19,66 +21,28 @@ use Macure\JojkaSDK\Http\Requests\GetCampaignRecipientsStatusRequest;
 class CampaignServiceTest extends TestCase
 {
     /**
-     * Test should throw exceptions for missing arguments
+     * Test should add campaign
      *
-     * @return void
-     */
-    public function testShouldThrowExceptionForMissingArguments()
-    {
-        $this->expectException(MissingOptionsException::class);
-
-        $data = [
-            AddCampaignRequest::MSG       => 'hello',
-            AddCampaignRequest::SCHEDULED => '2016-05-31 12:18:52',
-            AddCampaignRequest::NAME      => 'test campaign'
-        ];
-        
-        new AddCampaignRequest($data);        
-   }
-
-   /**
-     * Test should throw exceptions for invalid arguments
-     *
-     * @return void
-     */
-    public function testShouldThrowExceptionForInvalidArguments()
-    {
-        $this->expectException(InvalidOptionsException::class);
-
-        $data = [
-            AddCampaignRequest::TO_MSISDN => '46709771337;46709966666',
-            AddCampaignRequest::MSG       => 'hello',
-            AddCampaignRequest::SCHEDULED => '2016/05/31 12:18:52',
-            AddCampaignRequest::NAME      => 'test campaign'
-        ];
-        
-        new AddCampaignRequest($data);        
-   }
-    
-    /**
-     * Test adding campaign
-     * 
      * @return void
      */
     public function testShouldAddCampaign()
     {
         $body = '{"campaign_id": "287359"}';
-        
-        $data = [
+
+        $campaignService = $this->createCampaignService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $campaignService->addCampaign([
             AddCampaignRequest::TO_MSISDN => '46709771337;46709966666',
             AddCampaignRequest::MSG       => 'hello',
             AddCampaignRequest::SCHEDULED => '2016-05-31 12:18:52',
-            AddCampaignRequest::NAME      => 'test campaign',
-        ];
-
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+            AddCampaignRequest::NAME      => 'test campaign'
         ]);
 
-        $response = $client->sendRequest(new AddCampaignRequest($data));
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(CampaignResponse::class, $response);
     }
 
     /**
@@ -90,18 +54,17 @@ class CampaignServiceTest extends TestCase
     {
         $body = '{"successes": "done"}';
 
-        $data = [
-            CancelCampaignRequest::CAMPAIGN_ID => 287359
-        ];
+        $campaignService = $this->createCampaignService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
 
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $response = $campaignService->cancelCampaign([
+            CancelCampaignRequest::CAMPAIGN_ID => 287359
         ]);
 
-        $response = $client->sendRequest(new CancelCampaignRequest($data));
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(SuccessResponse::class, $response);
     }
 
     /**
@@ -113,9 +76,9 @@ class CampaignServiceTest extends TestCase
     {
         $body = '[
                     {
-                        "receiver":  "467352xxxxx",
-                        "message_id":"1900607",
-                        "status":    "DELIVERED"
+                        "receiver":   "467352xxxxx",
+                        "message_id": "1900607",
+                        "status":     "DELIVERED"
                     },
                     {
                         "receiver":   "4670903xxxxxx",
@@ -129,17 +92,28 @@ class CampaignServiceTest extends TestCase
                     }
                 ]';
 
-        $data = [
-            GetCampaignRecipientsStatusRequest::CAMPAIGN_ID  => 287359
-        ];
+        $campaignService = $this->createCampaignService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
 
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $response = $campaignService->getCampaignRecipientsStatus([
+            GetCampaignRecipientsStatusRequest::CAMPAIGN_ID => 287359
         ]);
 
-        $response = $client->sendRequest(new GetCampaignRecipientsStatusRequest($data));
+        $this->assertInstanceOf(CampaignRecipientsStatusResponse::class, $response);
+    }
 
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+    /**
+     * Create campaign service
+     *
+     * @param Client $client
+     *
+     * @return CampaignService
+     */
+    private function createCampaignService(Client $client) 
+    {
+        return new CampaignService(['API_key' => 'foobar'], $client);
     }
 }

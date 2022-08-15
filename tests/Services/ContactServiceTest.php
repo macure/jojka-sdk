@@ -5,9 +5,14 @@ namespace Macure\JojkaSDK\Tests\Services;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Tests\Helper;
+use Macure\JojkaSDK\Services\ContactService;
+use Macure\JojkaSDK\Http\Response\ArrayResponse;
+use Macure\JojkaSDK\Http\Response\BooleanResponse;
+use Macure\JojkaSDK\Http\Response\ContactResponse;
+use Macure\JojkaSDK\Http\Response\SuccessResponse;
 use Macure\JojkaSDK\Http\Requests\AddContactRequest;
 use Macure\JojkaSDK\Http\Requests\InBlocklistRequest;
-use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
+use Macure\JojkaSDK\Http\Response\ContactListResponse;
 use Macure\JojkaSDK\Http\Requests\RemoveContactRequest;
 use Macure\JojkaSDK\Http\Requests\AddToBlocklistRequest;
 use Macure\JojkaSDK\Http\Requests\AddContactToGroupRequest;
@@ -25,23 +30,6 @@ use Macure\JojkaSDK\Http\Requests\RemoveContactFromGroupRequest;
 class ContactServiceTest extends TestCase
 {
     /**
-     * Test should throw exceptions for invalid arguments
-     *
-     * @return void
-     */
-    public function testShouldThrowExceptionForInvalidArguments()
-    {
-        $this->expectException(InvalidOptionsException::class);
-
-        $data = [
-            ExportContactsListRequest::MAX    => 10001,
-            ExportContactsListRequest::OFFSET => 0,
-        ];
-        
-        new ExportContactsListRequest($data);        
-   }
-   
-    /**
      * Test Should add Contact
      *
      * @return void
@@ -50,20 +38,19 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"msisdn": "46709771337"}';
 
-        $data = [
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $contactService->addContact([
             AddContactRequest::MSISDN => '46709771337',
             AddContactRequest::NAME   => 'Lilleman',
             AddContactRequest::GROUP  => 'Utvecklare;Jojka personal'
-        ];
-
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
         ]);
 
-        $response = $client->sendRequest(new AddContactRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(ContactResponse::class, $response);
     }
 
     /**
@@ -75,18 +62,17 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"successes": "done"}';
 
-        $data = [
-            RemoveContactRequest::MSISDN => '46709771337'
-        ];
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
 
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $response = $contactService->removeContact([
+            RemoveContactRequest::MSISDN => '46709771337'
         ]);
 
-        $response = $client->sendRequest(new RemoveContactRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(SuccessResponse::class, $response);
     }
 
     /**
@@ -97,20 +83,19 @@ class ContactServiceTest extends TestCase
     public function testShouldAddContactToGroup()
     {
         $body = '{"msisdn": "46709771337","group": "gruppnamn2"}';
-        
-        $data = [
+
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $contactService->addContactToGroup([
             AddContactToGroupRequest::MSISDN => '46709771337',
             AddContactToGroupRequest::GROUP  => 'gruppnamn2'
-        ];
-
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
         ]);
 
-        $response = $client->sendRequest(new AddContactToGroupRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(ContactResponse::class, $response);
     }
 
     /**
@@ -122,19 +107,18 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"msisdn": "46709771337","group": "Utvecklare"}';
 
-        $data = [
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $contactService->removeContactFromGroup([
             RemoveContactFromGroupRequest::MSISDN => '46709771337',
             RemoveContactFromGroupRequest::GROUP  => 'Utvecklare'
-        ];
-
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
         ]);
 
-        $response = $client->sendRequest(new RemoveContactFromGroupRequest($data));
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(ContactResponse::class, $response);
     }
 
     /**
@@ -146,24 +130,22 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"successes": "done"}';
 
-        $data = [
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $contactService->importContactsList([
             ImportContactsListRequest::CONTACTS_LIST => [
                 'msisdn' => '46709771337',
                 'name'   => 'Lilleman',
                 'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
             ]
-        ];
-
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
         ]);
 
-        $response = $client->sendRequest(new ImportContactsListRequest($data));
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(SuccessResponse::class, $response);
     }
-
 
     /**
      * Test should export contacts list 
@@ -193,19 +175,18 @@ class ContactServiceTest extends TestCase
                     ]
                 }';
             
-        $data = [
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $contactService->exportContactsList([
             ExportContactsListRequest::MAX    => 100,
             ExportContactsListRequest::OFFSET => 0
-        ];
-            
-        $client   = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
         ]);
 
-        $response = $client->sendRequest(new ExportContactsListRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(ContactListResponse::class, $response);
     }
 
     /**
@@ -216,19 +197,18 @@ class ContactServiceTest extends TestCase
     public function testShouldGetGroupsFromMsisdn()
     {
         $body = '{"groups": [1,2,3,4]}';
-    
-        $data = [
-            GetGroupsFromMsisdnRequest::MSISDN => '46709771337'
-        ];
             
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
+
+        $response = $contactService->getGroupsFromMsisdn([
+            GetGroupsFromMsisdnRequest::MSISDN => '46709771337'
         ]);
 
-        $response = $client->sendRequest(new GetGroupsFromMsisdnRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(ArrayResponse::class, $response);
     }
 
     /**
@@ -240,18 +220,17 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"successes": "done"}';
 
-        $data = [
-            RemoveFromBlocklistrequest::MSISDN => '46709771337'
-        ];
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
 
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $response = $contactService->removeFromBlocklist([
+            RemoveFromBlocklistRequest::MSISDN => '46709771337'
         ]);
 
-        $response = $client->sendRequest(new RemoveFromBlocklistRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(SuccessResponse::class, $response);
     }
 
     /**
@@ -263,18 +242,17 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"successes": "done"}';
 
-        $data = [
-            AddToBlocklistRequest::MSISDN => '46709771337'
-        ];
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
 
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $response = $contactService->addToBlocklist([
+            AddToBlocklistRequest::MSISDN => '46709771337'
         ]);
 
-        $response = $client->sendRequest(new AddToBlocklistRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(SuccessResponse::class, $response);
     }
 
     /**
@@ -286,17 +264,28 @@ class ContactServiceTest extends TestCase
     {
         $body = '{"in_blocklist": true}';
 
-        $data = [
-            InBlocklistRequest::MSISDN => '46709771337'
-        ];
+        $contactService = $this->createContactService(
+            new Client([
+                'handler' => Helper::getMockHandler(200, $body)
+            ])
+        );
 
-        $client = new Client([
-            'handler' => Helper::getMockHandler(200, $body)
+        $response = $contactService->inBlocklist([
+            InBlocklistRequest::MSISDN => '46709771337'
         ]);
 
-        $response = $client->sendRequest(new InBlocklistRequest($data)); 
-
-        $this->assertEquals($body, $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertInstanceOf(BooleanResponse::class, $response);
+    }
+    
+    /**
+     * Create contact service
+     *
+     * @param Client $client
+     *
+     * @return ContactService
+     */
+    private function createContactService(Client $client) 
+    {
+        return new ContactService(['API_key' => 'foobar'], $client);
     }
 }
