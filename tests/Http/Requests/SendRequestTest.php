@@ -2,9 +2,9 @@
 
 namespace Macure\JojkaSDK\Tests\Http\Requests;
 
-use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use PHPUnit\Framework\TestCase;
 use Macure\JojkaSDK\Http\Requests\SendRequest;
+use Macure\JojkaSDK\Exceptions\InvalidOptionsException;
 use Macure\JojkaSDK\Exceptions\MissingOptionsException;
 
 /**

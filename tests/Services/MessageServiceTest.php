@@ -124,7 +124,7 @@ class MessageServiceTest extends TestCase
         $body = '["DELIVERED"]';
 
         $data = [
-            GetMessageStatusRequest::MSG_ID => 116690255,
+            GetMessageStatusRequest::MSG_ID => '6223c1c6079e9c21b5901d63',
         ];
 
         $messageService = $this->createMessageService(
@@ -134,7 +134,7 @@ class MessageServiceTest extends TestCase
         );
 
         $response = $messageService->getMessageStatus([
-            GetMessageStatusRequest::MSG_ID => 116690255,
+            GetMessageStatusRequest::MSG_ID => '6223c1c6079e9c21b5901d63',
         ]);
 
         $this->assertInstanceOf(MessageStatusResponse::class, $response);

@@ -89,9 +89,11 @@ $response = $sdk->contact->removeContactFromGroup([
 // import contacts
 $response = $sdk->contact->importContactsList([
     ImportContactsListRequest::CONTACTS_LIST => [
-        'msisdn' => '46709771337',
-        'name'   => 'Lilleman',
-        'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+        [
+            'msisdn' => '46709771337',
+            'name'   => 'Lilleman',
+            'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+        ]
     ]
 ]);
 
@@ -143,7 +145,7 @@ $response = $sdk->message->getMessageIdsByCampaignId([
 
 // get message status
 $response = $sdk->message->getMessageStatus([
-    GetMessageStatusRequest::MSG_ID => 116690255,
+    GetMessageStatusRequest::MSG_ID => '6223c1c6079e9c21b5901d63',
 ]);
 
 // send
@@ -179,9 +181,11 @@ $sdk = new \Macure\JojkaSDK\JojkaSDK([
  */
 $response = $sdk->contacts->importContactsList([
     ImportContactsListRequest::CONTACTS_LIST => [
-        'msisdn' => '46709771337',
-        'name'   => 'Lilleman',
-        'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+        [
+            'msisdn' => '46709771337',
+            'name'   => 'Lilleman',
+            'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+        ]
     ]
 ]);
 

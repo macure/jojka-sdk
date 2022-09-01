@@ -38,7 +38,9 @@ class ImportContactsListRequestTest extends TestCase
         
         new ImportContactsListRequest([
             ImportContactsListRequest::CONTACTS_LIST => [
-                'msisdn' => '46709771337'
+                [
+                    'msisdn' => '46709771337'
+                ]
             ]
         ]);
     }
@@ -55,8 +57,10 @@ class ImportContactsListRequestTest extends TestCase
         
         new ImportContactsListRequest([
             ImportContactsListRequest::CONTACTS_LIST => [
-                'msisdn' => '46709771337',
-                'name'   => 'Lilleman',
+                [
+                    'msisdn' => '46709771337',
+                    'name'   => 'Lilleman'
+                ]
             ]
         ]);
     }
@@ -73,8 +77,10 @@ class ImportContactsListRequestTest extends TestCase
         
         new ImportContactsListRequest([
             ImportContactsListRequest::CONTACTS_LIST => [
-                'msisdn' => '46709771337',
-                'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                [
+                    'msisdn' => '46709771337',
+                    'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                ]
             ]
         ]);
     }
@@ -91,8 +97,10 @@ class ImportContactsListRequestTest extends TestCase
         
         new ImportContactsListRequest([
             ImportContactsListRequest::CONTACTS_LIST => [
-                'name'   => 'Lilleman',
-                'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                [
+                    'name'   => 'Lilleman',
+                    'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                ]
             ]
         ]);
     }
@@ -106,9 +114,11 @@ class ImportContactsListRequestTest extends TestCase
     {
         $object = new ImportContactsListRequest([
             ImportContactsListRequest::CONTACTS_LIST => [
-                'msisdn' => '46709771337',
-                'name'   => 'Lilleman',
-                'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                [
+                    'msisdn' => '46709771337',
+                    'name'   => 'Lilleman',
+                    'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                ]
             ]
         ]);
 
