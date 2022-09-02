@@ -34,7 +34,7 @@ class GetMessageStatusRequestTest extends TestCase
     public function testShouldInitializeObject()
     {
         $object = new GetMessageStatusRequest([
-            GetMessageStatusRequest::MSG_ID => 287359,
+            GetMessageStatusRequest::MSG_ID => '6223c1c6079e9c21b5901d63',
         ]);
 
         $this->assertInstanceOf(GetMessageStatusRequest::class, $object);

@@ -27,9 +27,9 @@ class CampaignRecipientsStatus
     /**
      * Message id
      *
-     * @JMS\Type("integer")
+     * @JMS\Type("string")
      * 
-     * @var int
+     * @var string
      */
     private $messageId;
 
@@ -69,7 +69,7 @@ class CampaignRecipientsStatus
     /**
      * Get message id
      *
-     * @return int
+     * @return string
      */ 
     public function getMessageId()
     {
@@ -79,11 +79,11 @@ class CampaignRecipientsStatus
     /**
      * Set message id
      *
-     * @param int $messageId  Message id
+     * @param string $messageId Message id
      *
      * @return self
      */ 
-    public function setMessageId(int $messageId)
+    public function setMessageId(string $messageId)
     {
         $this->messageId = $messageId;
 

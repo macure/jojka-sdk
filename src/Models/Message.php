@@ -18,17 +18,17 @@ class Message
     /**
      * ID
      * 
-     * @JMS\Type("integer")
+     * @JMS\Type("string")
      * @JMS\SerializedName("message_id")
      * 
-     * @var int
+     * @var string
      */
     private $id;
 
     /**
-     * Get iD
+     * Get id
      *
-     * @return int
+     * @return string
      */ 
     public function getId()
     {
@@ -36,13 +36,13 @@ class Message
     }
 
     /**
-     * Set iD
+     * Set id
      *
-     * @param int $id  ID
+     * @param string $id ID
      *
      * @return self
      */ 
-    public function setId(int $id)
+    public function setId($id)
     {
         $this->id = $id;
 

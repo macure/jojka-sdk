@@ -16,11 +16,13 @@ class ImportContactsListRequest extends Request
     public const URI = parent::URI . '/import_contacts_list';
 
     /**
-     * Array containg following keys: 'msisdn', 'name' and 'groups'.
+     * Array containg array with following keys: 'msisdn', 'name' and 'groups'.
      * [
-     *     'msisdn' => string,
-     *     'name'   => string,
-     *     'groups' => string[]
+     *     [
+     *         'msisdn' => string,
+     *         'name'   => string,
+     *         'groups' => string[]
+     *     ]
      * ]
      * 
      * 
@@ -64,14 +66,16 @@ class ImportContactsListRequest extends Request
                     return $value;
                 }
 
+                $rows     = [];
                 $resolver = new OptionsResolver();
-                
-                $resolver->setRequired(['msisdn', 'name', 'groups']);
-                $value = $resolver->resolve($value);
-                
-                $value = join(';', array_merge([$value['msisdn'], $value['name']], $value['groups']));
 
-                return $value;
+                foreach ($value as $row) {
+                    $resolver->setRequired(['msisdn', 'name', 'groups']);
+                    $row    = $resolver->resolve($row);
+                    $rows[] = join(';', array_merge([$row['msisdn'], $row['name']], $row['groups']));
+                }
+
+                return join("\r\n", $rows);
             }
             
             throw new MissingOptionsException(sprintf('Both %s, %s are null or both are provided', self::CONTACTS_LIST, self::CONTACTS_LIST_URL));

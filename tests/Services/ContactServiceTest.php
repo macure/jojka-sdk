@@ -138,9 +138,11 @@ class ContactServiceTest extends TestCase
 
         $response = $contactService->importContactsList([
             ImportContactsListRequest::CONTACTS_LIST => [
-                'msisdn' => '46709771337',
-                'name'   => 'Lilleman',
-                'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                [
+                    'msisdn' => '46709771337',
+                    'name'   => 'Lilleman',
+                    'groups' => ['Utvecklare', 'Jojka personal 46709966666', 'Rutger', 'Lindquist', 'VD']
+                ]
             ]
         ]);
 

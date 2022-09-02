@@ -21,7 +21,7 @@ class MessageResponseTest extends TestCase
      */
     public function testShouldDeserializeResponse()
     {
-        $body = '{"message_id": "116690855"}';
+        $body = '{"message_id": "6223c1c6079e9c21b5901d63"}';
 
         $response = new MessageResponse(200, [], $body);
 

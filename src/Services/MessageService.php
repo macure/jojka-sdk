@@ -85,10 +85,10 @@ class MessageService extends AbstractService
      * Here's an example
      * 
      *      $api->getMessageStatus([
-     *          'msg_id' => 116690255,
+     *          'msg_id' => '6223c1c6079e9c21b5901d63',
      *      ]);
      * 
-     * @param array<string,int> $data
+     * @param array<string,string> $data
      * 
      * @return MessageStatusResponse
      * 
