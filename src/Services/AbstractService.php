@@ -94,6 +94,8 @@ abstract class AbstractService
             throw new ErrorResponseException(current($data['error']), $request, new Response(400, [], (string) json_encode($data)));
         }
 
+        $response->getBody()->rewind();
+        
         return $response;
     }
 }
