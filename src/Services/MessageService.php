@@ -51,7 +51,7 @@ class MessageService extends AbstractService
     public function fetchReplies(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new FetchRepliesRequest($data));
+        $response = $this->sendRequest(new FetchRepliesRequest($data));
 
         return new ReplyListResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -74,7 +74,7 @@ class MessageService extends AbstractService
     public function getMessageIdsByCampaignId(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new GetMessageIdsByCampaignIdRequest($data));
+        $response = $this->sendRequest(new GetMessageIdsByCampaignIdRequest($data));
 
         return new ArrayResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -97,7 +97,7 @@ class MessageService extends AbstractService
     public function getMessageStatus(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new GetMessageStatusRequest($data));
+        $response = $this->sendRequest(new GetMessageStatusRequest($data));
 
         return new MessageStatusResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -121,7 +121,7 @@ class MessageService extends AbstractService
     public function send(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new SendRequest($data));
+        $response = $this->sendRequest(new SendRequest($data));
 
         return new MessageResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }

@@ -60,7 +60,7 @@ class ContactService extends AbstractService
     public function addContact(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new AddContactRequest($data));
+        $response = $this->sendRequest(new AddContactRequest($data));
 
         return new ContactResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -83,7 +83,7 @@ class ContactService extends AbstractService
     public function removeContact(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new RemoveContactRequest($data));
+        $response = $this->sendRequest(new RemoveContactRequest($data));
 
         return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -108,7 +108,7 @@ class ContactService extends AbstractService
     public function addContactToGroup(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new AddContactToGroupRequest($data));
+        $response = $this->sendRequest(new AddContactToGroupRequest($data));
 
         return new ContactResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -132,7 +132,7 @@ class ContactService extends AbstractService
     public function removeContactFromGroup(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new RemoveContactFromGroupRequest($data));
+        $response = $this->sendRequest(new RemoveContactFromGroupRequest($data));
 
         return new ContactResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -156,7 +156,7 @@ class ContactService extends AbstractService
     public function exportContactsList(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new ExportContactsListRequest($data));
+        $response = $this->sendRequest(new ExportContactsListRequest($data));
 
         return new ContactListResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -182,7 +182,7 @@ class ContactService extends AbstractService
     public function importContactsList(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new ImportContactsListRequest($data));
+        $response = $this->sendRequest(new ImportContactsListRequest($data));
 
         return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -205,7 +205,7 @@ class ContactService extends AbstractService
     public function getGroupsFromMsisdn(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new GetGroupsFromMsisdnRequest($data));
+        $response = $this->sendRequest(new GetGroupsFromMsisdnRequest($data));
 
         $array = json_decode($response->getBody(), true);
         
@@ -233,7 +233,7 @@ class ContactService extends AbstractService
     public function removeFromBlocklist(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new RemoveFromBlocklistRequest($data));
+        $response = $this->sendRequest(new RemoveFromBlocklistRequest($data));
 
         return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -256,7 +256,7 @@ class ContactService extends AbstractService
     public function addToBlocklist(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new AddToBlocklistRequest($data));
+        $response = $this->sendRequest(new AddToBlocklistRequest($data));
 
         return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -279,7 +279,7 @@ class ContactService extends AbstractService
     public function inBlocklist(array $data)
     {
         $data = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new InBlocklistRequest($data));
+        $response = $this->sendRequest(new InBlocklistRequest($data));
 
         $array = json_decode($response->getBody(), true);
         
