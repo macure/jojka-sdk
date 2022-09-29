@@ -51,7 +51,7 @@ class CampaignService extends AbstractService
     public function addCampaign(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new AddCampaignRequest($data));
+        $response = $this->sendRequest(new AddCampaignRequest($data));
 
         return new CampaignResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -74,7 +74,7 @@ class CampaignService extends AbstractService
     public function cancelCampaign(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new CancelCampaignRequest($data));
+        $response = $this->sendRequest(new CancelCampaignRequest($data));
 
         return new SuccessResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
@@ -97,7 +97,7 @@ class CampaignService extends AbstractService
     public function getCampaignRecipientsStatus(array $data)
     {
         $data     = $this->prepareDefaults($data);
-        $response = $this->client->sendRequest(new GetCampaignRecipientsStatusRequest($data));
+        $response = $this->sendRequest(new GetCampaignRecipientsStatusRequest($data));
 
         return new CampaignRecipientsStatusResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
